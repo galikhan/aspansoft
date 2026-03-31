@@ -3,750 +3,882 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AspanSoftware — Разработка сайтов и приложений</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>AspanSoftware — Разработка сайтов и мобильных приложений</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
-    --bg: #050810;
-    --bg2: #080d1a;
-    --surface: #0d1526;
-    --border: rgba(0,200,255,0.12);
-    --cyan: #00c8ff;
-    --cyan2: #00ffe0;
-    --purple: #7c4dff;
-    --text: #e8f0ff;
-    --muted: #6a7fa8;
-    --font-head: 'Syne', sans-serif;
-    --font-mono: 'Space Mono', monospace;
+    --bg: #f4f3ef;
+    --surface: #ffffff;
+    --surface2: #edecea;
+    --ink: #0d0d0d;
+    --ink2: #3a3a3a;
+    --ink3: #777;
+    --accent: #0057ff;
+    --accent2: #00c9a7;
+    --border: #e0dfd9;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+    --radius: 12px;
   }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html { scroll-behavior: smooth; }
 
   body {
     background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-head);
+    color: var(--ink);
+    font-family: var(--sans);
     overflow-x: hidden;
-    cursor: none;
+    cursor: default;
   }
 
-  /* Custom cursor */
-  .cursor {
-    position: fixed; width: 12px; height: 12px;
-    background: var(--cyan); border-radius: 50%;
-    pointer-events: none; z-index: 9999;
-    transform: translate(-50%,-50%);
-    transition: transform 0.1s, opacity 0.3s;
-    mix-blend-mode: screen;
-  }
-  .cursor-ring {
-    position: fixed; width: 36px; height: 36px;
-    border: 1px solid var(--cyan); border-radius: 50%;
-    pointer-events: none; z-index: 9998;
-    transform: translate(-50%,-50%);
-    transition: all 0.15s ease;
-    opacity: 0.5;
-  }
-
-  /* Noise overlay */
+  /* ─── NOISE OVERLAY ─────────────────────────────── */
   body::before {
     content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 0; opacity: 0.4;
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
   }
 
-  /* Grid background */
-  body::after {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none; z-index: 0;
-  }
-
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 22px 60px;
-    background: rgba(5,8,16,0.85);
+  /* ─── HEADER ────────────────────────────────────── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5vw;
+    height: 68px;
+    background: rgba(244,243,239,0.88);
     backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
   }
 
   .logo {
-    font-family: var(--font-mono); font-size: 1rem; font-weight: 700;
-    color: var(--cyan); letter-spacing: 0.05em;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -0.03em;
+    color: var(--ink);
     text-decoration: none;
   }
-  .logo span { color: var(--text); }
+  .logo span { color: var(--accent); }
 
-  .nav-links { display: flex; gap: 40px; list-style: none; }
-  .nav-links a {
-    font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted);
-    text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase;
-    transition: color 0.3s;
+  nav { display: flex; gap: 2.2rem; }
+  nav a {
+    font-family: var(--sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink2);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     position: relative;
+    padding-bottom: 3px;
+    transition: color 0.2s;
   }
-  .nav-links a::after {
-    content: ''; position: absolute; bottom: -4px; left: 0;
-    width: 0; height: 1px; background: var(--cyan);
-    transition: width 0.3s;
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 2px;
+    background: var(--accent);
+    transition: width 0.25s ease;
   }
-  .nav-links a:hover { color: var(--cyan); }
-  .nav-links a:hover::after { width: 100%; }
+  nav a:hover { color: var(--accent); }
+  nav a:hover::after { width: 100%; }
 
-  .nav-cta {
-    font-family: var(--font-mono); font-size: 0.78rem; color: var(--bg);
-    background: var(--cyan); padding: 10px 22px; border-radius: 4px;
-    text-decoration: none; letter-spacing: 0.08em; font-weight: 700;
-    transition: all 0.3s;
-    box-shadow: 0 0 20px rgba(0,200,255,0.3);
+  .header-cta {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+    padding: 7px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: background 0.2s, color 0.2s;
   }
-  .nav-cta:hover { background: var(--cyan2); box-shadow: 0 0 30px rgba(0,255,224,0.4); }
+  .header-cta:hover { background: var(--accent); color: #fff; }
 
-  /* SECTIONS */
-  section { position: relative; z-index: 1; }
-
-  /* HERO */
+  /* ─── HERO ──────────────────────────────────────── */
   #hero {
     min-height: 100vh;
-    display: flex; flex-direction: column; justify-content: center;
-    padding: 140px 60px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 5vw 80px;
+    position: relative;
     overflow: hidden;
   }
 
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-family: var(--font-mono); font-size: 0.72rem; color: var(--cyan);
-    border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px;
-    margin-bottom: 36px; letter-spacing: 0.1em;
-    animation: fadeUp 0.8s ease both;
-  }
-  .hero-badge::before {
-    content: ''; width: 6px; height: 6px; background: var(--cyan);
-    border-radius: 50%; animation: pulse 1.5s infinite;
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.5;
   }
 
-  .hero-title {
-    font-size: clamp(3rem, 7vw, 7rem); font-weight: 800; line-height: 0.95;
-    letter-spacing: -0.03em; margin-bottom: 32px;
-    animation: fadeUp 0.8s 0.1s ease both;
+  .hero-circle {
+    position: absolute;
+    width: 600px; height: 600px;
+    right: -80px; top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, rgba(0,87,255,0.1), rgba(0,201,167,0.06), transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
   }
-  .hero-title .line { display: block; overflow: hidden; }
-  .hero-title .accent { color: var(--cyan); position: relative; }
-  .hero-title .accent::after {
-    content: ''; position: absolute; bottom: 4px; left: 0; right: 0;
-    height: 3px; background: linear-gradient(90deg, var(--cyan), var(--purple));
-    border-radius: 2px;
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--accent2);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.2s forwards;
   }
+
+  h1 {
+    font-family: var(--sans);
+    font-size: clamp(2.8rem, 7vw, 6rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.04em;
+    max-width: 800px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
 
   .hero-sub {
-    font-size: 1.1rem; color: var(--muted); max-width: 520px;
-    line-height: 1.7; margin-bottom: 48px;
-    font-family: var(--font-mono); font-size: 0.88rem;
-    animation: fadeUp 0.8s 0.2s ease both;
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    color: var(--ink2);
+    max-width: 520px;
+    line-height: 1.65;
+    margin-top: 1.8rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
   }
 
   .hero-actions {
-    display: flex; gap: 20px; flex-wrap: wrap;
-    animation: fadeUp 0.8s 0.3s ease both;
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.8rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
   }
 
   .btn-primary {
-    display: inline-flex; align-items: center; gap: 10px;
-    background: var(--cyan); color: var(--bg); font-family: var(--font-mono);
-    font-size: 0.82rem; font-weight: 700; padding: 14px 32px;
-    border-radius: 4px; text-decoration: none; letter-spacing: 0.08em;
-    box-shadow: 0 0 30px rgba(0,200,255,0.35);
-    transition: all 0.3s;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 14px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 24px rgba(0,87,255,0.25);
   }
-  .btn-primary:hover { background: var(--cyan2); transform: translateY(-2px); box-shadow: 0 0 50px rgba(0,200,255,0.5); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,87,255,0.35); }
 
   .btn-secondary {
-    display: inline-flex; align-items: center; gap: 10px;
-    border: 1px solid var(--border); color: var(--text); font-family: var(--font-mono);
-    font-size: 0.82rem; padding: 14px 32px; border-radius: 4px;
-    text-decoration: none; letter-spacing: 0.08em;
-    transition: all 0.3s;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 14px 28px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: border-color 0.2s, color 0.2s;
   }
-  .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* Floating orbs */
-  .orb {
-    position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none;
-    animation: float 8s ease-in-out infinite;
-  }
-  .orb-1 { width: 500px; height: 500px; background: rgba(0,200,255,0.06); right: -100px; top: 100px; animation-delay: 0s; }
-  .orb-2 { width: 300px; height: 300px; background: rgba(124,77,255,0.08); right: 200px; bottom: 100px; animation-delay: -3s; }
-  .orb-3 { width: 200px; height: 200px; background: rgba(0,255,224,0.05); left: 300px; top: 200px; animation-delay: -6s; }
-
-  /* Stats bar */
   .hero-stats {
-    display: flex; gap: 60px; margin-top: 80px; padding-top: 40px;
-    border-top: 1px solid var(--border);
-    animation: fadeUp 0.8s 0.4s ease both;
+    display: flex;
+    gap: 3rem;
+    margin-top: 4rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
   }
-  .stat-item { font-family: var(--font-mono); }
-  .stat-num { font-size: 2rem; font-weight: 700; color: var(--cyan); display: block; }
-  .stat-label { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .stat-num {
+    font-family: var(--sans);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.04em;
+  }
+  .stat-num span { color: var(--accent); }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--ink3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
 
-  /* SERVICES */
-  #services { padding: 120px 60px; }
+  /* ─── SECTIONS ──────────────────────────────────── */
+  section {
+    padding: 100px 5vw;
+  }
 
   .section-label {
-    font-family: var(--font-mono); font-size: 0.72rem; color: var(--cyan);
-    letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 16px;
-    display: flex; align-items: center; gap: 12px;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
   .section-label::before {
-    content: ''; display: block; width: 30px; height: 1px; background: var(--cyan);
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background: var(--accent);
   }
 
-  .section-title {
-    font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800;
-    letter-spacing: -0.02em; margin-bottom: 60px; line-height: 1.1;
+  h2 {
+    font-family: var(--sans);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    max-width: 640px;
   }
+
+  /* ─── SERVICES ──────────────────────────────────── */
+  #services { background: var(--surface); }
 
   .services-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5px;
+    margin-top: 3.5rem;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
   }
 
   .service-card {
-    background: var(--surface); padding: 44px 36px;
-    border: 1px solid var(--border);
-    transition: all 0.4s;
-    position: relative; overflow: hidden;
-    cursor: none;
+    background: var(--bg);
+    padding: 2.5rem 2rem;
+    transition: background 0.25s;
+    position: relative;
   }
-  .service-card::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(0,200,255,0.05), transparent);
-    opacity: 0; transition: opacity 0.4s;
-  }
-  .service-card:hover { border-color: var(--cyan); transform: translateY(-4px); }
-  .service-card:hover::before { opacity: 1; }
+  .service-card:hover { background: #fff; }
 
   .service-icon {
-    font-size: 2.5rem; margin-bottom: 24px; display: block;
-    filter: drop-shadow(0 0 12px rgba(0,200,255,0.4));
-  }
-  .service-num {
-    font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted);
-    letter-spacing: 0.15em; margin-bottom: 16px;
-  }
-  .service-name {
-    font-size: 1.25rem; font-weight: 700; margin-bottom: 14px;
-  }
-  .service-desc {
-    font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted);
-    line-height: 1.7;
-  }
-  .service-tag {
-    display: inline-block; margin-top: 20px;
-    font-family: var(--font-mono); font-size: 0.65rem; color: var(--cyan);
-    border: 1px solid rgba(0,200,255,0.2); padding: 4px 10px; border-radius: 3px;
-    letter-spacing: 0.08em;
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.4rem;
   }
 
-  /* PROJECTS */
-  #projects { padding: 120px 60px; background: var(--bg2); }
+  .service-card h3 {
+    font-family: var(--sans);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .service-card p {
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    color: var(--ink2);
+    line-height: 1.65;
+  }
+
+  .service-card .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 1.2rem;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--accent);
+    background: rgba(0,87,255,0.08);
+    padding: 3px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── PROJECTS ──────────────────────────────────── */
+  #projects { background: var(--bg); }
 
   .projects-grid {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
-    margin-top: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3.5rem;
   }
 
   .project-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; overflow: hidden;
-    transition: all 0.4s; position: relative;
-    cursor: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s;
   }
-  .project-card:hover { border-color: rgba(0,200,255,0.3); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
-
-  .project-header {
-    padding: 28px 32px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex; justify-content: space-between; align-items: flex-start;
-  }
-  .project-num { font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted); }
-  .project-status {
-    font-family: var(--font-mono); font-size: 0.65rem; color: var(--cyan2);
-    background: rgba(0,255,224,0.08); padding: 3px 10px; border-radius: 20px;
-    border: 1px solid rgba(0,255,224,0.15);
+  .project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.1);
   }
 
-  .project-body { padding: 24px 32px 32px; }
-  .project-name {
-    font-size: 1.4rem; font-weight: 700; margin-bottom: 10px;
+  .project-thumb {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    background: var(--surface2);
   }
-  .project-desc {
-    font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted);
-    line-height: 1.7; margin-bottom: 20px;
-  }
-  .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
-  .tag {
-    font-family: var(--font-mono); font-size: 0.65rem; color: var(--purple);
-    background: rgba(124,77,255,0.1); padding: 4px 10px; border-radius: 3px;
-    border: 1px solid rgba(124,77,255,0.2); letter-spacing: 0.05em;
-  }
-  .project-link {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-family: var(--font-mono); font-size: 0.75rem; color: var(--cyan);
-    text-decoration: none; letter-spacing: 0.08em;
-    transition: gap 0.3s;
-  }
-  .project-link:hover { gap: 14px; }
 
-  /* Featured project spans full width */
-  .project-card.featured { grid-column: 1 / -1; }
-  .project-card.featured .project-body { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  .project-card.featured .project-name { font-size: 1.8rem; }
+  .project-info {
+    padding: 1.4rem 1.6rem 1.6rem;
+  }
+  .project-type {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .project-info h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .project-info p {
+    font-size: 0.85rem;
+    color: var(--ink2);
+    line-height: 1.6;
+  }
 
-  /* ABOUT */
-  #about { padding: 120px 60px; }
+  /* ─── MODAL ─────────────────────────────────────── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,10,0.6);
+    backdrop-filter: blur(8px);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--surface);
+    border-radius: 16px;
+    max-width: 820px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.25);
+    transform: scale(0.95) translateY(20px);
+    transition: transform 0.3s ease;
+  }
+  .modal-overlay.active .modal { transform: scale(1) translateY(0); }
+
+  .modal img {
+    width: 100%;
+    max-height: 380px;
+    object-fit: cover;
+    border-radius: 16px 16px 0 0;
+  }
+  .modal-body { padding: 2rem 2.5rem 2.5rem; }
+  .modal-body .project-type { font-family: var(--mono); font-size: 0.7rem; color: var(--accent2); text-transform: uppercase; letter-spacing: 0.12em; }
+  .modal-body h2 { font-size: 1.8rem; margin: 0.5rem 0 1rem; letter-spacing: -0.03em; }
+  .modal-body p { color: var(--ink2); line-height: 1.7; font-size: 0.95rem; }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .modal-close:hover { background: var(--border); }
+  .modal-wrapper { position: relative; }
+
+  /* ─── ABOUT ─────────────────────────────────────── */
+  #about { background: var(--surface); }
 
   .about-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    margin-top: 3.5rem;
+    align-items: start;
   }
 
-  .about-text { }
   .about-text p {
-    font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted);
-    line-height: 1.9; margin-bottom: 20px;
+    color: var(--ink2);
+    line-height: 1.75;
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
   }
 
-  .team-grid { display: flex; flex-direction: column; gap: 20px; }
+  .team-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
 
   .team-card {
-    background: var(--surface); border: 1px solid var(--border);
-    padding: 28px 32px; border-radius: 8px;
-    display: flex; align-items: center; gap: 24px;
-    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem 1.6rem;
+    transition: border-color 0.2s;
   }
-  .team-card:hover { border-color: var(--cyan); }
+  .team-card:hover { border-color: var(--accent); }
 
-  .team-avatar {
-    width: 60px; height: 60px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--cyan), var(--purple));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.4rem; font-weight: 800; color: var(--bg); flex-shrink: 0;
+  .avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--sans);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
   }
-  .team-info { }
-  .team-name { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
-  .team-role {
-    font-family: var(--font-mono); font-size: 0.72rem; color: var(--cyan);
+
+  .team-info h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .team-info .role {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--accent);
+    text-transform: uppercase;
     letter-spacing: 0.08em;
   }
-  .team-exp {
-    font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted);
-    margin-top: 6px;
+  .team-info .exp {
+    font-size: 0.82rem;
+    color: var(--ink3);
+    margin-top: 4px;
   }
 
-  .skills-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-  .chip {
-    font-family: var(--font-mono); font-size: 0.6rem; color: var(--muted);
-    border: 1px solid var(--border); padding: 3px 8px; border-radius: 3px;
+  /* ─── CONTACT ────────────────────────────────────── */
+  #contacts {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  #contacts .section-label { color: var(--accent2); }
+  #contacts .section-label::before { background: var(--accent2); }
+  #contacts h2 { color: #fff; }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 3.5rem;
+  }
+
+  .contact-info p {
+    color: rgba(255,255,255,0.6);
+    line-height: 1.75;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .contact-icon {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+  .contact-item-text .label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 3px;
+  }
+  .contact-item-text a,
+  .contact-item-text span {
+    font-size: 0.95rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .contact-item-text a:hover { color: var(--accent2); }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .contact-form input,
+  .contact-form textarea {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .contact-form input::placeholder,
+  .contact-form textarea::placeholder { color: rgba(255,255,255,0.3); }
+  .contact-form input:focus,
+  .contact-form textarea:focus { border-color: var(--accent2); }
+  .contact-form textarea { resize: vertical; min-height: 130px; }
+  .contact-form button {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .contact-form button:hover { background: #0045cc; transform: translateY(-1px); }
+
+  /* ─── FOOTER ─────────────────────────────────────── */
+  footer {
+    background: #060606;
+    padding: 2rem 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  footer .logo { color: rgba(255,255,255,0.5); }
+  footer .logo span { color: var(--accent); }
+  footer p {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.3);
     letter-spacing: 0.05em;
   }
 
-  /* CONTACT */
-  #contacts {
-    padding: 120px 60px; background: var(--bg2);
-    border-top: 1px solid var(--border);
-  }
-
-  .contact-wrap {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
-  }
-
-  .contact-info { }
-  .contact-tagline {
-    font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 800;
-    line-height: 1.2; margin-bottom: 32px; letter-spacing: -0.02em;
-  }
-  .contact-tagline .accent { color: var(--cyan); }
-
-  .contact-items { display: flex; flex-direction: column; gap: 20px; }
-  .contact-item {
-    display: flex; align-items: center; gap: 16px;
-    font-family: var(--font-mono); font-size: 0.82rem;
-  }
-  .contact-icon {
-    width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 6px;
-    display: flex; align-items: center; justify-content: center; font-size: 1rem;
-    flex-shrink: 0;
-  }
-  .contact-item a { color: var(--cyan); text-decoration: none; }
-  .contact-item a:hover { color: var(--cyan2); }
-  .contact-item span { color: var(--muted); }
-
-  /* Form */
-  .contact-form { display: flex; flex-direction: column; gap: 16px; }
-
-  .form-group { display: flex; flex-direction: column; gap: 8px; }
-  .form-label {
-    font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted);
-    letter-spacing: 0.12em; text-transform: uppercase;
-  }
-  .form-input, .form-textarea {
-    background: var(--surface); border: 1px solid var(--border);
-    color: var(--text); font-family: var(--font-mono); font-size: 0.82rem;
-    padding: 12px 16px; border-radius: 4px;
-    outline: none; transition: border-color 0.3s;
-    resize: none;
-  }
-  .form-input:focus, .form-textarea:focus { border-color: var(--cyan); }
-  .form-textarea { min-height: 120px; }
-
-  .form-submit {
-    background: var(--cyan); color: var(--bg); border: none;
-    font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700;
-    padding: 14px 32px; border-radius: 4px; cursor: none;
-    letter-spacing: 0.08em; transition: all 0.3s;
-    box-shadow: 0 0 20px rgba(0,200,255,0.3);
-  }
-  .form-submit:hover { background: var(--cyan2); box-shadow: 0 0 40px rgba(0,200,255,0.5); }
-
-  /* FOOTER */
-  footer {
-    padding: 32px 60px; border-top: 1px solid var(--border);
-    display: flex; justify-content: space-between; align-items: center;
-    font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted);
-    position: relative; z-index: 1;
-  }
-  footer a { color: var(--cyan); text-decoration: none; }
-
-  /* ANIMATIONS */
+  /* ─── ANIMATIONS ─────────────────────────────────── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.7); }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-30px) scale(1.05); }
-  }
-  @keyframes scanline {
-    0% { top: -5%; }
-    100% { top: 105%; }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* Scroll reveal */
-  .reveal {
-    opacity: 0; transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .reveal.visible { opacity: 1; transform: none; }
-  .reveal-d1 { transition-delay: 0.1s; }
-  .reveal-d2 { transition-delay: 0.2s; }
-  .reveal-d3 { transition-delay: 0.3s; }
-
-  /* Mobile */
-  @media (max-width: 900px) {
-    nav { padding: 18px 24px; }
-    .nav-links { display: none; }
-    #hero, #services, #projects, #about, #contacts { padding-left: 24px; padding-right: 24px; }
-    .services-grid { grid-template-columns: 1fr; }
-    .projects-grid { grid-template-columns: 1fr; }
-    .project-card.featured .project-body { grid-template-columns: 1fr; }
-    .about-grid, .contact-wrap { grid-template-columns: 1fr; gap: 48px; }
-    footer { flex-direction: column; gap: 12px; text-align: center; }
-    .hero-stats { gap: 32px; flex-wrap: wrap; }
+  /* ─── RESPONSIVE ─────────────────────────────────── */
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .hero-stats { gap: 1.8rem; }
   }
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-
-<!-- NAV -->
-<nav>
-  <a href="#hero" class="logo">ASPAN<span>SOFTWARE</span></a>
-  <ul class="nav-links">
-    <li><a href="#services">Услуги</a></li>
-    <li><a href="#projects">Проекты</a></li>
-    <li><a href="#about">О нас</a></li>
-    <li><a href="#contacts">Контакты</a></li>
-  </ul>
-  <a href="#contacts" class="nav-cta">Обсудить проект →</a>
-</nav>
+<!-- HEADER -->
+<header>
+  <a href="https://aspansoftware.kz" class="logo">Aspan<span>Software</span>.kz</a>
+  <nav>
+    <a href="#services">Услуги</a>
+    <a href="#projects">Проекты</a>
+    <a href="#about">О нас</a>
+    <a href="#contacts">Контакты</a>
+  </nav>
+  <a href="#contacts" class="header-cta">Связаться</a>
+</header>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-
-  <div class="hero-badge">aspansoftware.kz — Астана, Казахстан</div>
-
-  <h1 class="hero-title">
-    <span class="line">Создаём</span>
-    <span class="line"><span class="accent">цифровые</span></span>
-    <span class="line">продукты</span>
-  </h1>
-
-  <p class="hero-sub">
-    Разрабатываем сайты, веб-системы и мобильные приложения —<br>
-    от идеи до запуска. Работаем быстро, думаем стратегически.
-  </p>
-
+  <div class="hero-grid-bg"></div>
+  <div class="hero-circle"></div>
+  <div class="hero-tag">// Digital Product Studio — Астана, Казахстан</div>
+  <h1>Строим <em>цифровые</em> продукты под ключ</h1>
+  <p class="hero-sub">Разрабатываем веб-сайты, корпоративные системы и мобильные приложения. Превращаем идеи в работающий бизнес-инструмент.</p>
   <div class="hero-actions">
-    <a href="#projects" class="btn-primary">Смотреть проекты ↓</a>
-    <a href="#contacts" class="btn-secondary">Связаться с нами →</a>
+    <a href="#projects" class="btn-primary">Смотреть проекты</a>
+    <a href="#contacts" class="btn-secondary">// Написать нам</a>
   </div>
-
   <div class="hero-stats">
-    <div class="stat-item">
-      <span class="stat-num">5+</span>
-      <span class="stat-label">лет опыта</span>
+    <div>
+      <div class="stat-num">5<span>+</span></div>
+      <div class="stat-label">Лет опыта</div>
     </div>
-    <div class="stat-item">
-      <span class="stat-num">10+</span>
-      <span class="stat-label">проектов</span>
+    <div>
+      <div class="stat-num">15<span>+</span></div>
+      <div class="stat-label">Проектов</div>
     </div>
-    <div class="stat-item">
-      <span class="stat-num">2</span>
-      <span class="stat-label">эксперта в команде</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num">KZ</span>
-      <span class="stat-label">и международно</span>
+    <div>
+      <div class="stat-num">3<span></span></div>
+      <div class="stat-label">Направления</div>
     </div>
   </div>
 </section>
 
 <!-- SERVICES -->
 <section id="services">
-  <div class="section-label reveal">01 — Услуги</div>
-  <h2 class="section-title reveal reveal-d1">Что мы делаем</h2>
-
+  <div class="section-label">Услуги</div>
+  <h2>Что мы делаем</h2>
   <div class="services-grid">
-    <div class="service-card reveal">
-      <span class="service-icon">🌐</span>
-      <div class="service-num">// 001</div>
-      <div class="service-name">Веб-разработка</div>
-      <div class="service-desc">Корпоративные сайты, лендинги, интернет-магазины и порталы — от дизайна до деплоя.</div>
-      <span class="service-tag">React / Vue / Laravel</span>
+    <div class="service-card">
+      <div class="service-icon">🌐</div>
+      <h3>Веб-разработка</h3>
+      <p>Корпоративные сайты, лендинги, порталы и веб-сервисы с современным дизайном и высокой производительностью.</p>
+      <div class="tag-list">
+        <span class="tag">React</span>
+        <span class="tag">Django</span>
+        <span class="tag">Node.js</span>
+        <span class="tag">PostgreSQL</span>
+      </div>
     </div>
-    <div class="service-card reveal reveal-d1">
-      <span class="service-icon">⚙️</span>
-      <div class="service-num">// 002</div>
-      <div class="service-name">Веб-системы</div>
-      <div class="service-desc">Внутренние CRM, ERP и автоматизация бизнес-процессов с удобным интерфейсом.</div>
-      <span class="service-tag">REST API / Базы данных</span>
+    <div class="service-card">
+      <div class="service-icon">⚙️</div>
+      <h3>Корпоративные системы</h3>
+      <p>Внутренние платформы автоматизации, CRM, ERP и учётные системы для бизнеса любого масштаба.</p>
+      <div class="tag-list">
+        <span class="tag">REST API</span>
+        <span class="tag">Микросервисы</span>
+        <span class="tag">Интеграции</span>
+      </div>
     </div>
-    <div class="service-card reveal reveal-d2">
-      <span class="service-icon">📱</span>
-      <div class="service-num">// 003</div>
-      <div class="service-name">Мобильные приложения</div>
-      <div class="service-desc">Нативные Android-приложения и кроссплатформенные решения для вашего бизнеса.</div>
-      <span class="service-tag">Android / Flutter</span>
+    <div class="service-card">
+      <div class="service-icon">📱</div>
+      <h3>Мобильные приложения</h3>
+      <p>Нативные и кроссплатформенные приложения для Android и iOS — от MVP до production-ready продукта.</p>
+      <div class="tag-list">
+        <span class="tag">Android</span>
+        <span class="tag">Flutter</span>
+        <span class="tag">iOS</span>
+      </div>
     </div>
-    <div class="service-card reveal">
-      <span class="service-icon">🎨</span>
-      <div class="service-num">// 004</div>
-      <div class="service-name">UI/UX Дизайн</div>
-      <div class="service-desc">Продуманные интерфейсы, которые нравятся пользователям и конвертируют.</div>
-      <span class="service-tag">Figma / Прототипы</span>
-    </div>
-    <div class="service-card reveal reveal-d1">
-      <span class="service-icon">🔧</span>
-      <div class="service-num">// 005</div>
-      <div class="service-name">Поддержка и развитие</div>
-      <div class="service-desc">Техническая поддержка, доработка функций и масштабирование готовых проектов.</div>
-      <span class="service-tag">DevOps / Хостинг</span>
-    </div>
-    <div class="service-card reveal reveal-d2">
-      <span class="service-icon">📊</span>
-      <div class="service-num">// 006</div>
-      <div class="service-name">Интеграции и API</div>
-      <div class="service-desc">Подключение платёжных систем, государственных сервисов и внешних платформ.</div>
-      <span class="service-tag">API / Интеграции</span>
+    <div class="service-card">
+      <div class="service-icon">🎨</div>
+      <h3>UI/UX Дизайн</h3>
+      <p>Продуманные пользовательские интерфейсы, которые конвертируют. От wireframe до готового дизайна.</p>
+      <div class="tag-list">
+        <span class="tag">Figma</span>
+        <span class="tag">Прототипы</span>
+        <span class="tag">UX Research</span>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- PROJECTS -->
 <section id="projects">
-  <div class="section-label reveal">02 — Проекты</div>
-  <h2 class="section-title reveal reveal-d1">Наши работы</h2>
-
+  <div class="section-label">Проекты</div>
+  <h2>Избранные работы</h2>
   <div class="projects-grid">
 
-    <!-- Featured -->
-    <div class="project-card featured reveal">
-      <div class="project-header">
-        <div class="project-num">// Project_001</div>
-        <div class="project-status">✦ Запущен</div>
-      </div>
-      <div class="project-body">
-        <div>
-          <div class="project-name">MySteam KZ</div>
-          <div class="project-desc">Образовательная платформа для школ — обучающий контент, тесты, управление курсами. Полноценная LMS-система для казахстанских образовательных учреждений.</div>
-          <div class="project-tags">
-            <span class="tag">EdTech</span>
-            <span class="tag">LMS</span>
-            <span class="tag">Веб-платформа</span>
-          </div>
-          <a href="https://my.steam.kz/" target="_blank" class="project-link">Открыть проект →</a>
-        </div>
-        <div>
-          <div class="project-name">iZharyq</div>
-          <div class="project-desc">Внутренняя система управления городским освещением Астаны — мониторинг, заявки, отчёты. Включает мобильное приложение для Android.</div>
-          <div class="project-tags">
-            <span class="tag">Smart City</span>
-            <span class="tag">Android App</span>
-            <span class="tag">Внутренняя система</span>
-          </div>
-          <a href="https://izharyq.kz/" target="_blank" class="project-link">Открыть проект →</a>
-        </div>
+    <div class="project-card" onclick="openModal('modal-steam')">
+      <img class="project-thumb" src="https://raw.githubusercontent.com/galikhan/aspansoft/refs/heads/master/mysteam.png" alt="My Steam KZ" onerror="this.style.background='#edecea';this.style.height='200px'">
+      <div class="project-info">
+        <div class="project-type">Образовательная платформа</div>
+        <h3>My Steam KZ</h3>
+        <p>Сайт для организации, предоставляющей обучающий контент для школ Казахстана.</p>
       </div>
     </div>
 
-    <div class="project-card reveal">
-      <div class="project-header">
-        <div class="project-num">// Project_002</div>
-        <div class="project-status">✦ Запущен</div>
-      </div>
-      <div class="project-body">
-        <div class="project-name">FSG Audit KZ</div>
-        <div class="project-desc">Корпоративный сайт для аудиторской компании — презентация услуг, экспертизы и команды.</div>
-        <div class="project-tags">
-          <span class="tag">B2B</span>
-          <span class="tag">Корпоративный сайт</span>
-          <span class="tag">Аудит</span>
-        </div>
-        <a href="https://fsgaudit.kz/" target="_blank" class="project-link">Открыть проект →</a>
+    <div class="project-card" onclick="openModal('modal-fsg')">
+      <img class="project-thumb" src="https://raw.githubusercontent.com/galikhan/aspansoft/refs/heads/master/fsgaudit.png" alt="FSG Audit" onerror="this.style.background='#edecea';this.style.height='200px'">
+      <div class="project-info">
+        <div class="project-type">Корпоративный сайт</div>
+        <h3>FSG Audit</h3>
+        <p>Веб-представительство для профессиональной аудиторской компании.</p>
       </div>
     </div>
 
-    <div class="project-card reveal reveal-d1">
-      <div class="project-header">
-        <div class="project-num">// Project_003</div>
-        <div class="project-status">✦ Запущен</div>
-      </div>
-      <div class="project-body">
-        <div class="project-name">VostokShop Survey</div>
-        <div class="project-desc">Интерактивная система опросов для компании по продаже витаминов — сбор данных о клиентах.</div>
-        <div class="project-tags">
-          <span class="tag">Опросник</span>
-          <span class="tag">E-commerce</span>
-          <span class="tag">Health</span>
-        </div>
-        <a href="https://srv.vostokshop.kz/survey/start" target="_blank" class="project-link">Открыть проект →</a>
+    <div class="project-card" onclick="openModal('modal-vostok')">
+      <img class="project-thumb" src="https://raw.githubusercontent.com/galikhan/aspansoft/refs/heads/master/vostok.png" alt="Vostok Shop Survey" onerror="this.style.background='#edecea';this.style.height='200px'">
+      <div class="project-info">
+        <div class="project-type">Веб-система</div>
+        <h3>Vostok Shop — Опросник</h3>
+        <p>Онлайн-система опросов для компании по продаже витаминов и нутриентов.</p>
       </div>
     </div>
 
-    <div class="project-card reveal reveal-d2" style="grid-column: 1 / -1;">
-      <div class="project-header">
-        <div class="project-num">// Project_004</div>
-        <div class="project-status">✦ Запущен</div>
+    <div class="project-card" onclick="openModal('modal-wald')">
+      <img class="project-thumb" src="https://raw.githubusercontent.com/galikhan/aspansoft/refs/heads/master/wald.png" alt="WALD" onerror="this.style.background='#edecea';this.style.height='200px'">
+      <div class="project-info">
+        <div class="project-type">Корпоративный портал</div>
+        <h3>WALD.com.kz</h3>
+        <p>Многопрофильная организация с несколькими бизнес-направлениями.</p>
       </div>
-      <div class="project-body" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
-        <div>
-          <div class="project-name">Wald.com.kz</div>
-          <div class="project-desc">Многопрофильный корпоративный портал для организации с несколькими направлениями бизнеса. Единая точка входа для всех продуктов и услуг компании.</div>
-          <div class="project-tags">
-            <span class="tag">Многопрофильный</span>
-            <span class="tag">Корпоративный портал</span>
-            <span class="tag">Fullstack</span>
-          </div>
-        </div>
-        <div style="display:flex;align-items:flex-end;">
-          <a href="https://wald.com.kz/" target="_blank" class="project-link">Открыть проект →</a>
-        </div>
+    </div>
+
+    <div class="project-card" onclick="openModal('modal-izharyq')">
+      <img class="project-thumb" src="https://raw.githubusercontent.com/galikhan/aspansoft/refs/heads/master/izharyq.png" alt="Izharyq" onerror="this.style.background='#edecea';this.style.height='200px'">
+      <div class="project-info">
+        <div class="project-type">Внутренняя система + Android</div>
+        <h3>Izharyq.kz</h3>
+        <p>Система управления освещением города Астана + мобильное приложение для Android.</p>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-label reveal">03 — О нас</div>
-  <h2 class="section-title reveal reveal-d1">Команда</h2>
-
-  <div class="about-grid">
-    <div class="about-text reveal">
-      <p>
-        AspanSoftware — это небольшая команда профессионалов из Астаны, которая создаёт
-        продуманные цифровые продукты. Мы работаем с бизнесом любого масштаба — от стартапов
-        до государственных учреждений.
-      </p>
-      <p>
-        Наш подход: глубокое погружение в задачу клиента, честная коммуникация и качество
-        на каждом этапе — от wireframe до запуска в production.
-      </p>
-      <p>
-        За 5+ лет мы реализовали проекты в сферах EdTech, FinTech, Smart City, E-commerce
-        и корпоративной автоматизации.
-      </p>
-
-      <div style="margin-top:40px;padding:24px;background:var(--surface);border:1px solid var(--border);border-radius:8px;border-left:3px solid var(--cyan);">
-        <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted);margin-bottom:8px;">// Наш стек</div>
-        <div class="skills-chips">
-          <span class="chip">React</span>
-          <span class="chip">Vue.js</span>
-          <span class="chip">Laravel</span>
-          <span class="chip">Node.js</span>
-          <span class="chip">Android</span>
-          <span class="chip">Flutter</span>
-          <span class="chip">PostgreSQL</span>
-          <span class="chip">MySQL</span>
-          <span class="chip">Docker</span>
-          <span class="chip">Figma</span>
-          <span class="chip">REST API</span>
-          <span class="chip">Git</span>
-        </div>
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-steam" onclick="closeModalOnOverlay(event, 'modal-steam')">
+  <div class="modal-wrapper">
+    <div class="modal">
+      <img src="https://raw.githubusercontent.com/galikhan/aspansoft/refs/heads/master/mysteam.png" alt="My Steam KZ">
+      <div class="modal-body">
+        <div class="project-type">Образовательная платформа · Web</div>
+        <h2>My Steam KZ</h2>
+        <p>Платформа для организации, которая предоставляет обучающий контент для школ Казахстана. Сайт включает каталог курсов, личные кабинеты для учителей и учеников, систему управления контентом. Проект направлен на цифровизацию образования в регионах страны.</p>
       </div>
     </div>
+    <button class="modal-close" onclick="closeModal('modal-steam')">✕</button>
+  </div>
+</div>
 
-    <div class="team-grid reveal reveal-d1">
+<div class="modal-overlay" id="modal-fsg" onclick="closeModalOnOverlay(event, 'modal-fsg')">
+  <div class="modal-wrapper">
+    <div class="modal">
+      <img src="https://raw.githubusercontent.com/galikhan/aspansoft/refs/heads/master/fsgaudit.png" alt="FSG Audit">
+      <div class="modal-body">
+        <div class="project-type">Корпоративный сайт · Web</div>
+        <h2>FSG Audit</h2>
+        <p>Профессиональный корпоративный сайт для аудиторской компании. Включает страницы услуг, портфолио выполненных проектов, контактную форму и SEO-оптимизированную структуру. Строгий деловой дизайн формирует доверие и укрепляет репутацию бренда.</p>
+      </div>
+    </div>
+    <button class="modal-close" onclick="closeModal('modal-fsg')">✕</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-vostok" onclick="closeModalOnOverlay(event, 'modal-vostok')">
+  <div class="modal-wrapper">
+    <div class="modal">
+      <img src="https://raw.githubusercontent.com/galikhan/aspansoft/refs/heads/master/vostok.png" alt="Vostok Survey">
+      <div class="modal-body">
+        <div class="project-type">Веб-система · Опросник</div>
+        <h2>Vostok Shop — Система опросов</h2>
+        <p>Специализированная онлайн-система опросов для компании по продаже витаминов и нутриентов. Позволяет собирать данные от покупателей, анализировать обратную связь и улучшать ассортимент. Реализованы многошаговые формы, логика ветвления и экспорт результатов.</p>
+      </div>
+    </div>
+    <button class="modal-close" onclick="closeModal('modal-vostok')">✕</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-wald" onclick="closeModalOnOverlay(event, 'modal-wald')">
+  <div class="modal-wrapper">
+    <div class="modal">
+      <img src="https://raw.githubusercontent.com/galikhan/aspansoft/refs/heads/master/wald.png" alt="WALD">
+      <div class="modal-body">
+        <div class="project-type">Корпоративный портал · Web</div>
+        <h2>WALD.com.kz</h2>
+        <p>Корпоративный портал для многопрофильной организации с разными направлениями в бизнесе. Сайт объединяет информацию о нескольких подразделениях, предоставляет единую точку входа для клиентов и партнёров. Реализованы каталоги, новостной блок и интеграция с внутренними системами.</p>
+      </div>
+    </div>
+    <button class="modal-close" onclick="closeModal('modal-wald')">✕</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-izharyq" onclick="closeModalOnOverlay(event, 'modal-izharyq')">
+  <div class="modal-wrapper">
+    <div class="modal">
+      <img src="https://raw.githubusercontent.com/galikhan/aspansoft/refs/heads/master/izharyq.png" alt="Izharyq">
+      <div class="modal-body">
+        <div class="project-type">Внутренняя система + Android · Астана</div>
+        <h2>Izharyq.kz — Система освещения</h2>
+        <p>Внутренняя платформа для организации, обслуживающей системы уличного освещения города Астана. Веб-система позволяет управлять объектами, отслеживать статус работ и формировать отчёты. Дополнительно разработано мобильное приложение для Android, которым пользуются выездные бригады на объектах.</p>
+      </div>
+    </div>
+    <button class="modal-close" onclick="closeModal('modal-izharyq')">✕</button>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">О нас</div>
+  <h2>Команда, которой доверяют</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>AspanSoftware — это небольшая, но очень эффективная команда из Астаны. Мы специализируемся на создании качественных цифровых продуктов: от простых сайтов-визиток до сложных корпоративных систем и мобильных приложений.</p>
+      <p>За пять лет работы мы накопили разносторонний опыт: образование, аудит, ритейл, ЖКХ и инфраструктура. Нам близок системный подход — мы не просто пишем код, а решаем реальные бизнес-задачи.</p>
+      <p>Работаем прозрачно: фиксированные сроки, честная цена, постоянная коммуникация с клиентом на каждом этапе.</p>
+    </div>
+    <div class="team-grid">
       <div class="team-card">
-        <div class="team-avatar">ГХ</div>
+        <div class="avatar">ГХ</div>
         <div class="team-info">
-          <div class="team-name">Хамитов Галихан</div>
-          <div class="team-role">// Fullstack Developer</div>
-          <div class="team-exp">Опыт 5+ лет · Backend & Frontend</div>
-          <div class="skills-chips" style="margin-top:10px;">
-            <span class="chip">Laravel</span>
-            <span class="chip">React</span>
-            <span class="chip">Node.js</span>
-            <span class="chip">PostgreSQL</span>
-          </div>
+          <h4>Хамитов Галихан</h4>
+          <div class="role">Fullstack Developer</div>
+          <div class="exp">Опыт более 5 лет · Backend, Frontend, DevOps</div>
         </div>
       </div>
-
       <div class="team-card">
-        <div class="team-avatar" style="background:linear-gradient(135deg,var(--purple),var(--cyan));">АЖ</div>
+        <div class="avatar">АЖ</div>
         <div class="team-info">
-          <div class="team-name">Алтынбек Жусупов</div>
-          <div class="team-role">// Web Designer</div>
-          <div class="team-exp">Опыт 5+ лет · UI/UX & Visual Design</div>
-          <div class="skills-chips" style="margin-top:10px;">
-            <span class="chip">Figma</span>
-            <span class="chip">UI/UX</span>
-            <span class="chip">Branding</span>
-            <span class="chip">Prototype</span>
-          </div>
-        </div>
-      </div>
-
-      <div style="padding:20px 24px;border:1px dashed rgba(0,200,255,0.15);border-radius:8px;text-align:center;">
-        <div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;">
-          // мы растём — если ты крутой разработчик или дизайнер —
-          <a href="#contacts" style="color:var(--cyan);text-decoration:none;"> напиши нам</a>
+          <h4>Алтынбек Жусупов</h4>
+          <div class="role">Web Designer</div>
+          <div class="exp">Опыт более 5 лет · UI/UX, Branding, Figma</div>
         </div>
       </div>
     </div>
@@ -755,133 +887,69 @@
 
 <!-- CONTACTS -->
 <section id="contacts">
-  <div class="section-label reveal">04 — Контакты</div>
-
-  <div class="contact-wrap">
-    <div class="contact-info reveal">
-      <div class="contact-tagline">
-        Готовы обсудить<br><span class="accent">ваш проект?</span>
+  <div class="section-label">Контакты</div>
+  <h2>Начнём работать вместе?</h2>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p>Расскажите о вашем проекте — мы свяжемся с вами в течение рабочего дня и обсудим детали. Работаем с клиентами по всему Казахстану.</p>
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div class="contact-item-text">
+          <div class="label">Телефон / WhatsApp</div>
+          <a href="tel:+77072099925">+7 707 209-99-25</a>
+        </div>
       </div>
-
-      <div class="contact-items">
-        <div class="contact-item">
-          <div class="contact-icon">📧</div>
-          <div>
-            <div style="color:var(--muted);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;">Email</div>
-            <a href="mailto:info@aspansoftware.kz">info@aspansoftware.kz</a>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">📱</div>
-          <div>
-            <div style="color:var(--muted);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;">Телефон / WhatsApp</div>
-            <a href="tel:+77000000000">+7 (700) 000-00-00</a>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">📍</div>
-          <div>
-            <div style="color:var(--muted);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;">Локация</div>
-            <span>Астана, Казахстан</span>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">🌐</div>
-          <div>
-            <div style="color:var(--muted);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;">Сайт</div>
-            <a href="https://aspansoftware.kz" target="_blank">aspansoftware.kz</a>
-          </div>
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div class="contact-item-text">
+          <div class="label">Город</div>
+          <span>Астана, Казахстан</span>
         </div>
       </div>
     </div>
-
-    <div class="contact-form reveal reveal-d1">
-      <div class="form-group">
-        <label class="form-label">Ваше имя</label>
-        <input class="form-input" type="text" placeholder="Алихан Смаилов">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email или Telegram</label>
-        <input class="form-input" type="text" placeholder="@username или email@mail.ru">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Расскажите о проекте</label>
-        <textarea class="form-textarea" placeholder="Опишите вашу задачу, сроки, бюджет..."></textarea>
-      </div>
-      <button class="form-submit" onclick="this.textContent='✓ Отправлено! Свяжемся скоро';this.style.background='var(--cyan2)'">Отправить заявку →</button>
-    </div>
+    <form class="contact-form" onsubmit="handleForm(event)">
+      <input type="text" placeholder="Ваше имя" required>
+      <input type="tel" placeholder="Номер телефона">
+      <input type="email" placeholder="Email">
+      <textarea placeholder="Расскажите о вашем проекте..."></textarea>
+      <button type="submit">Отправить заявку →</button>
+    </form>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div>© 2024 AspanSoftware · Астана, Казахстан</div>
-  <div>
-    <a href="https://aspansoftware.kz">aspansoftware.kz</a>
-  </div>
-  <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--muted);">
-    Designed & Built with ♥ in KZ
-  </div>
+  <a href="https://aspansoftware.kz" class="logo">Aspan<span>Software</span>.kz</a>
+  <p>© 2024 AspanSoftware — Все права защищены</p>
 </footer>
 
 <script>
-  // Custom cursor
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx + 'px';
-    cursor.style.top = my + 'px';
+  function openModal(id) {
+    document.getElementById(id).classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  function closeModalOnOverlay(e, id) {
+    if (e.target === document.getElementById(id)) closeModal(id);
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.active').forEach(m => {
+        m.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    }
   });
 
-  function animRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.left = rx + 'px';
-    ring.style.top = ry + 'px';
-    requestAnimationFrame(animRing);
-  }
-  animRing();
-
-  document.querySelectorAll('a, button, .service-card, .project-card, .team-card').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.transform = 'translate(-50%,-50%) scale(2)';
-      ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
-      ring.style.borderColor = 'var(--cyan2)';
-    });
-    el.addEventListener('mouseleave', () => {
-      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
-      ring.style.transform = 'translate(-50%,-50%) scale(1)';
-      ring.style.borderColor = 'var(--cyan)';
-    });
-  });
-
-  // Scroll reveal
-  const revealEls = document.querySelectorAll('.reveal');
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-  }, { threshold: 0.1 });
-  revealEls.forEach(el => obs.observe(el));
-
-  // Typing effect for hero title
-  const heroTitle = document.querySelector('.hero-title');
-  if (heroTitle) {
-    heroTitle.querySelectorAll('.line').forEach((line, i) => {
-      line.style.animationDelay = `${i * 0.15}s`;
-    });
-  }
-
-  // Animated stats counter
-  function animCount(el, target) {
-    let cur = 0;
-    const step = target / 40;
-    const t = setInterval(() => {
-      cur += step;
-      if (cur >= target) { cur = target; clearInterval(t); }
-      el.textContent = Math.floor(cur) + (el.dataset.suffix || '');
-    }, 30);
+  function handleForm(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.textContent = '✓ Заявка отправлена!';
+    btn.style.background = '#00c9a7';
+    setTimeout(() => { btn.textContent = 'Отправить заявку →'; btn.style.background = ''; }, 3000);
   }
 </script>
 </body>
